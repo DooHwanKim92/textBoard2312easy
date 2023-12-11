@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 public class Member {
     int id;
-    String passWord;
-    String memberId;
-    String nickName;
+    String userId;
+    String password;
+    String regDate;
 }
