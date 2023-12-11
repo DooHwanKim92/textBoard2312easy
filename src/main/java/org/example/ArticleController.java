@@ -12,8 +12,8 @@ public class ArticleController {
     LocalDate localDate = LocalDate.now();
     List<Article> articleList = new ArrayList<>();
     Member loginedMember = null;
-    // 만약 회원가입을 해서 로그인을 하면....
-    // 그 Member객체에 있는 data가 아티클컨트롤러에도 전달을 해줘야한다
+    // 로그인을 했을 때 발생하는 Member의 정보를
+    // ArticleController에도 넘겨줘야 한다.
     public void write() {
         sc = new Scanner(System.in);
         if (loginedMember == null) {
