@@ -3,11 +3,12 @@ package org.example;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class App {
     public void run() {
-        System.out.println("===== 명언 앱 =====");
+        System.out.println("========== 명언 앱 ==========");
 
         Scanner sc = new Scanner(System.in);
 
@@ -24,7 +25,7 @@ public class App {
             System.out.print("명령 > ");
             String command = sc.nextLine().trim();
             if (command.equals("종료")) {
-                System.out.println("===== 시스템 종료 =====");
+                System.out.println("========== 시스템 종료 ==========");
                 break;
             } else if (command.equals("등록")) {
                 if (loginedMember == null) {
@@ -59,6 +60,11 @@ public class App {
                 }
                 System.out.print("삭제할 명언 번호 입력 > ");
                 int removeId = Integer.parseInt(sc.nextLine().trim());
+                try {
+                    if (wiseSayingList.get(removeId) == null) continue;
+                } catch (IndexOutOfBoundsException e) {
+                    System.out.println("해당 게시글은 존재하지 않습니다.");
+                }
 
                 for (int i = 0; i < wiseSayingList.size(); i++) {
                     if (wiseSayingList.get(i).getId() == removeId)
@@ -77,24 +83,32 @@ public class App {
                 System.out.print("수정할 명언 번호 입력 > ");
                 int modifyId = Integer.parseInt(sc.nextLine().trim());
 
+                WiseSaying wiseSaying = null;
                 for (int i = 0; i < wiseSayingList.size(); i++) {
-                    if (wiseSayingList.get(i).getId() == modifyId)
-                        if (wiseSayingList.get(i).getUserId().equals(loginedMember.getUserId())) {
-                            System.out.println("기존 명언 : " + wiseSayingList.get(i).getContent());
-                            System.out.print("명언(수정) : ");
-                            String modifyContent = sc.nextLine().trim();
-
-                            System.out.println("기존 작가 : " + wiseSayingList.get(i).getAuthor());
-                            System.out.print("작가(수정) : ");
-                            String modifyAuthor = sc.nextLine().trim();
-
-                            wiseSayingList.get(i).setContent(modifyContent);
-                            wiseSayingList.get(i).setAuthor(modifyAuthor);
-                            System.out.println(modifyId + "번 명언 수정 완료!!");
-                        } else {
-                            System.out.println("다른 사람이 작성한 게시물은 수정할 수 없습니다.");
-                        }
+                    if (wiseSayingList.get(i).getId() == modifyId) {
+                        wiseSaying = wiseSayingList.get(i);
+                    }
                 }
+                if (wiseSaying == null) {
+                    System.out.println("해당 게시글은 존재하지 않습니다.");
+                    continue;
+                }
+                if (!Objects.equals(wiseSaying.getUserId(), loginedMember.getUserId())) {
+                    System.out.println("다른 사람이 작성한 게시물은 수정할 수 없습니다.");
+                    continue;
+                }
+                System.out.println("기존 명언 : " + wiseSaying.getContent());
+                System.out.print("명언(수정) : ");
+                String modifyContent = sc.nextLine().trim();
+
+                System.out.println("기존 작가 : " + wiseSaying.getAuthor());
+                System.out.print("작가(수정) : ");
+                String modifyAuthor = sc.nextLine().trim();
+
+                wiseSaying.setContent(modifyContent);
+                wiseSaying.setAuthor(modifyAuthor);
+
+                System.out.println(modifyId + "번 명언 수정 완료!!");
             } else if (command.equals("회원가입")) {
                 // 중복 아이디 검증
                 String userId;
@@ -152,7 +166,6 @@ public class App {
                         break;
                     }
                 }
-
                 if (checkedMember == null) {
                     System.out.println("존재하지 않는 ID 입니다.");
                     continue;
