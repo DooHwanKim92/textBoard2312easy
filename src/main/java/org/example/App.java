@@ -10,6 +10,7 @@ public class App {
 
         Scanner sc = new Scanner(System.in);
         List<WiseSaying> wiseSayingList = new ArrayList<>();
+        List<Member> memberList = new ArrayList<>();
         int id = 1;
 
         while (true) {
@@ -79,16 +80,37 @@ public class App {
                     if (passWord.equals(passWordCheck)) {
                         break;
                     }
+                    System.out.println("비밀번호를 다시 한 번 입력해주세요.");
                 }
-
-
                 System.out.print("닉네임 입력 > ");
                 String nickName = sc.nextLine().trim();
 
                 Member memberInfo = new Member(userId, passWord, memberId, nickName);
 
+                memberList.add(memberInfo);
+
                 System.out.println("회원가입에 성공했습니다!!");
                 userId++;
+            } else if (command.equals("로그인")) {
+                int identifyNumber = 0;
+                System.out.print("ID 입력 > ");
+                String logInId = sc.nextLine().trim();
+                for(int i = 0; i<memberList.size();i++) {
+                    if(!logInId.equals(memberList.get(i).getMemberId())) {
+                        System.out.println("존재하지 않는 ID 입니다.");
+                        break;
+                    } else {
+                        identifyNumber = i;
+                    }
+                }
+                System.out.print("PW 입력 > ");
+                String logInPassword = sc.nextLine().trim();
+                if(logInPassword.equals(memberList.get(identifyNumber).getPassWord())) {
+                    System.out.println("로그인 성공!!");
+                    System.out.println("\"" + memberList.get(identifyNumber).getNickName() + "\" 님 환영합니다.");
+                } else {
+                    System.out.println("비밀번호가 맞지 않습니다.");
+                }
             }
         }
     }
