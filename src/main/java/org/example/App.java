@@ -3,7 +3,6 @@ package org.example;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Scanner;
 
 public class App {
@@ -18,6 +17,8 @@ public class App {
         int userPrimaryId = 1;
 
         Member loginedMember = null;
+
+        LocalDate localDate = LocalDate.now();
 
         while (true) {
             System.out.print("명령 > ");
@@ -36,7 +37,7 @@ public class App {
                 String author = sc.nextLine().trim();
                 String userId = loginedMember.userId;
 
-                WiseSaying ws = new WiseSaying(id, content, author, userId);
+                WiseSaying ws = new WiseSaying(id, content, author, userId, localDate);
                 wiseSayingList.add(ws);
 
                 System.out.println(id + "번 명언 등록 완료!!");
@@ -46,10 +47,10 @@ public class App {
                     System.out.println("로그인이 필요합니다.");
                     continue;
                 }
-                System.out.println("  번호  /  작가  /  명언  / 작성자  ");
-                System.out.println("------------------------");
+                System.out.println("  번호  /  작가  /  명언  /  작성자  /  작성일자  ");
+                System.out.println("----------------------------------------------");
                 for (WiseSaying ws : wiseSayingList) {
-                    System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent() + " / " + ws.getUserId());
+                    System.out.println(ws.getId() + " / " + ws.getAuthor() + " / " + ws.getContent() + " / " + ws.getUserId() + " / " + ws.getLocalDate());
                 }
             } else if (command.equals("삭제")) {
                 if (loginedMember == null) {
