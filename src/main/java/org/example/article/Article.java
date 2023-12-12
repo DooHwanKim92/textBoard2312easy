@@ -15,5 +15,5 @@ public class Article {
     private String title;
     private String content;
     private String userId;
-    private LocalDate localDate;
+    private String localDate;
 }

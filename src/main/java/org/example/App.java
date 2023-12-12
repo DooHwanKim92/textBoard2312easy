@@ -1,16 +1,10 @@
 package org.example;
 
 import lombok.RequiredArgsConstructor;
-import org.example.article.Article;
 import org.example.article.ArticleController;
-import org.example.member.Member;
+import org.example.global.Container;
 import org.example.member.MemberController;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
 @RequiredArgsConstructor
 public class App {
     private final ArticleController articleController;
@@ -21,11 +15,10 @@ public class App {
         memberController = new MemberController();
     }
     public void run() {
-        System.out.println("========== 텍스트 게시판 ==========");
-
+        System.out.println("┌============= 텍스트 게시판 =============┐");
 
         while (true) {
-            System.out.print("명령 > ");
+            System.out.print("명령어 입력 ▶ ");
             String command = Container.getSc().nextLine().trim();
             switch (command) {
                 case "종료":
@@ -44,7 +37,7 @@ public class App {
                     articleController.modify();
                     break;
                 case "회원가입":
-                    memberController.joinMemberShip();
+                    memberController.joinMembership();
                     break;
                 case "로그인":
                     memberController.logIn();
