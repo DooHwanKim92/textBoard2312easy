@@ -1,4 +1,4 @@
-package org.example;
+package org.example.member;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,8 +8,8 @@ import lombok.Setter;
 @Setter
 @Getter
 public class Member {
-    int id;
-    String userId;
-    String password;
-    String regDate;
+    private int id;
+    private String userId;
+    private String password;
+    private String regDate;
 }

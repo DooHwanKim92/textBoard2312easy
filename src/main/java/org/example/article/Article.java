@@ -1,4 +1,4 @@
-package org.example;
+package org.example.article;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 
-public class WiseSaying {
+public class Article {
     private int id;
+    private String title;
     private String content;
-    private String author;
     private String userId;
     private LocalDate localDate;
 }
