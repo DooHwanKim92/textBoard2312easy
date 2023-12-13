@@ -5,11 +5,11 @@ public class MemberService {
     MemberService() {
         memberRepository = new MemberRepository();
     }
-    public void joinMembership() {
-        memberRepository.joinMembership();
+    public void joinMembership(String userId, String password) {
+        memberRepository.joinMembership(userId,password);
     }
-    public void logIn() {
-        memberRepository.logIn();
+    public Member logIn(String userId, String password) {
+        return memberRepository.logIn(userId, password);
     }
     public void logOut() {
         memberRepository.logOut();

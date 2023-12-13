@@ -21,9 +21,11 @@ public class ArticleController {
         String title = Container.getSc().nextLine().trim();
         System.out.print("내용(등록) : ");
         String content = Container.getSc().nextLine().trim();
-        String userId = loginedMember.getUserId();
 
-        this.articleService.write(title, content,userId);
+
+        int id = this.articleService.write(title, content);
+
+        System.out.println("<알림> " + id + "번 게시글 등록 완료!!");
 
     }
 
@@ -32,12 +34,12 @@ public class ArticleController {
         boolean isLogin = _checkedLogin(loginedMember);
         if (!isLogin) return;
 
-        List<Article> articleList = articleService.list();
+        List<Article> articleList = articleService.findByAll();
 
-        System.out.println("  번호  /  제목  /  내용  /  작성자  /  작성일자  ");
+        System.out.println("【  번호  /  제목  /  내용  /  작성자  /  작성일자  】");
         System.out.println("----------------------------------------------");
         for (Article article : articleList) {
-            System.out.println(article.getId() + " / " + article.getTitle() + " / " + article.getContent() + " / " + article.getUserId() + " / " + article.getLocalDate());
+            System.out.println("【 " + article.getId() + " / " + article.getTitle() + " / " + article.getContent() + " / " + article.getMemberId() + " / " + article.getLocalDate()+ " 】");
         }
     }
 
@@ -55,7 +57,7 @@ public class ArticleController {
             System.out.println("<알림> 해당 게시글은 존재하지 않습니다.");
             return;
         }
-        if (!Objects.equals(article.getUserId(), loginedMember.getUserId())) {
+        if (article.getMemberId()!= Container.getLoginedMember().getId()) {
             System.out.println("<알림> 다른 사람이 작성한 게시글은 삭제할 수 없습니다.");
             return;
         }
@@ -79,7 +81,7 @@ public class ArticleController {
             System.out.println("<알림> 해당 게시글은 존재하지 않습니다.");
             return;
         }
-        if (!Objects.equals(article.getUserId(), loginedMember.getUserId())) {
+        if (article.getMemberId()!= Container.getLoginedMember().getId()) {
             System.out.println("<알림> 다른 사람이 작성한 게시글은 수정할 수 없습니다.");
             return;
         }

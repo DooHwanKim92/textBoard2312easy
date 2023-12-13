@@ -7,17 +7,17 @@ public class ArticleService {
     public ArticleService() {
         articleRepository = new ArticleRepository();
     }
-    public void write(String title, String content, String userId) {
-        this.articleRepository.write(title, content, userId);
-    }
-    public List<Article> list() {
-        return this.articleRepository.list();
+    public int write(String title, String content) {
+        return this.articleRepository.write(title, content);
     }
     public void remove(int removeId) {
         this.articleRepository.remove(removeId);
     }
     public void modify(int modifyId, String title, String content) {
         this.articleRepository.modify(modifyId,title,content);
+    }
+    public List<Article> findByAll() {
+        return this.articleRepository.findByAll();
     }
     public Article articleFindById(int id) {
         return articleRepository.articleFindById(id);

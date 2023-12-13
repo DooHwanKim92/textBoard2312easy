@@ -1,21 +1,38 @@
 package org.example;
 
+import com.mysql.cj.jdbc.ConnectionGroup;
+
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.example.article.ArticleController;
+import org.example.db.DBConnection;
 import org.example.global.Container;
 import org.example.member.MemberController;
+
+import java.awt.*;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class App {
     private final ArticleController articleController;
     private final MemberController memberController;
     SystemController systemController = new SystemController();
+
     App() {
+        DBConnection.DB_NAME = "textBoard";
+        DBConnection.DB_PORT = 3306;
+        DBConnection.DB_USER = "root";
+        DBConnection.DB_PASSWORD = "";
+
+        Container.getDBConnection().connect();
+
         articleController = new ArticleController();
         memberController = new MemberController();
     }
+
     public void run() {
-        System.out.println("┌============= 텍스트 게시판 =============┐");
+        System.out.println("┌================== 텍스트 게시판 ==================┐");
 
         while (true) {
             System.out.print("명령어 입력 ▶ ");
