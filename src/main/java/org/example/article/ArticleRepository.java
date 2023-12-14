@@ -7,32 +7,39 @@ import java.util.List;
 import java.util.Map;
 
 public class ArticleRepository {
-    List<Article> articleList = new ArrayList<>();
     int articleId = 1;
+
     public int write(String title, String content) {
-        String sql = String.format("insert into article set title = '%s', content = '%s', memberId = %d, regDate = now()",title,content,Container.getLoginedMember().getId());
+        String sql = String.format("insert into article set title = '%s', content = '%s', memberId = %d, regDate = now()", title, content, Container.getLoginedMember().getId());
 
         Container.getDBConnection().insert(sql);
 
         return articleId;
     }
 
-    public int remove(Article article) {
-        String sql = String.format("delete from article where id = %d",article.getId());
+    public void remove(Article article) {
+        String sql = String.format("delete from article where id = %d", article.getId());
 
-        Container.getDBConnection().insert(sql);
-
-        return article.getId();
+        Container.getDBConnection().delete(sql);
     }
-    public int modify(Article article, String title, String content) {
-        String sql = String.format("update article set title = '%s', content = '%s'",title,content);
 
-        Container.getDBConnection().insert(sql);
+    public void modify(Article article, String title, String content) {
+        String sql = String.format("update article set title = '%s', content = '%s' where id = %d", title, content, article.getId());
 
-        return article.getId();
+        Container.getDBConnection().update(sql);
     }
+
     public List<Article> findByAll() {
-        List<Map<String, Object>> rows =  Container.getDBConnection().selectRows("select * from article");
+        List<Article> articleList = new ArrayList<>();
+        List<Map<String, Object>> rows = Container.getDBConnection().selectRows("SELECT\n" +
+                "article.id,\n" +
+                "article.title,\n" +
+                "article.content,\n" +
+                "`member`.userId,\n" +
+                "article.regDate\n" +
+                "FROM article\n" +
+                "INNER JOIN `member`\n" +
+                "ON article.memberId = `member`.id;");
 
         for (Map<String, Object> row : rows) {
             Article article = new Article(row);
@@ -42,7 +49,9 @@ public class ArticleRepository {
 
         return articleList;
     }
+
     public Article articleFindById(int id) {
+        List<Article> articleList = this.findByAll();
         for (int i = 0; i < articleList.size(); i++) {
             if (articleList.get(i).getId() == id) {
                 return articleList.get(i);

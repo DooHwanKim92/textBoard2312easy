@@ -9,11 +9,12 @@ public class MemberService {
         memberRepository = new MemberRepository();
     }
 
-    public String join (String userId, String password) {
-        return this.memberRepository.join(userId, password);
+    public void join (String userId, String password) {
+        this.memberRepository.join(userId, password);
     }
-
-
+    public void exit (String userId) {
+        this.memberRepository.exit(userId);
+    }
     public Member memberFindByUserId(String userId) {
         return this.memberRepository.memberFindByUserId(userId);
     }

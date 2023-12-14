@@ -55,10 +55,16 @@ public class MemberController {
     }
 
     public void joinMembership() {
+        if (Container.getLoginedMember() != null) {
+            System.out.println("<알림> 로그아웃을 먼저 해야합니다.");
+            return;
+        }
+
         String userId;
         String password;
         String checkPassword;
         LocalDate now = LocalDate.now();
+
         while (true) {
             System.out.print("(회원가입)ID 입력 : ");
             userId = Container.getSc().nextLine().trim();
@@ -88,8 +94,51 @@ public class MemberController {
             System.out.println("<알림> 비밀번호를 잘못입력했습니다.");
         }
 
-        String joinUserId = this.memberService.join(userId, password);
+        this.memberService.join(userId, password);
 
-        System.out.println("회원가입 완료!!");
+        System.out.println("[" + userId + "]님 회원가입 완료!!");
+    }
+
+    public void exitMembership() {
+        String password;
+        String checkPassword;
+        // 1. 로그인 상태여야함 > 로그인 상태인지 검증
+        if (Container.getLoginedMember() == null) {
+            System.out.println("<알림> 로그인을 먼저 해야합니다.");
+            return;
+        }
+        // 2. 그리고,,,,음 받는 정보가 많이 없으니 그냥 password 검증만 해야 할 듯
+        System.out.print("(회원탈퇴)PW 입력 : ");
+        password = Container.getSc().nextLine().trim();
+        System.out.print("(회원탈퇴)PW 확인 : ");
+        checkPassword = Container.getSc().nextLine().trim();
+
+        if (!password.equals(checkPassword)) {
+            System.out.println("<알림> 비밀번호를 잘못입력했습니다.");
+            return;
+        }
+
+        if (password.equals(Container.getLoginedMember().getPassword())) {
+            System.out.print("<알림> 정말 탈퇴하시겠습니까? (y/n)입력 ▶ ");
+            String yesOrNo = Container.getSc().nextLine().trim();
+            if (yesOrNo.equals("y") || yesOrNo.equals("Y")) {
+
+                memberService.exit(Container.getLoginedMember().getUserId());
+
+                System.out.println("☞===== 회원 탈퇴가 정상처리 되었습니다 =====☜");
+                System.out.println("☞===== 그동안 이용해주셔서 감사합니다 =====☜");
+
+                System.out.println("<알림> 로그아웃 되었습니다.");
+
+                this.memberService.logout();
+
+            } else if (yesOrNo.equals("n") || yesOrNo.equals("N")) {
+                System.out.println("<알림> 회원 탈퇴를 취소하셨습니다.");
+            } else {
+                System.out.println("<알림> y/Y 또는 n/N을 입력해주셔야 합니다.");
+            }
+        } else {
+            System.out.println("<알림> 비밀번호를 잘못 입력했습니다.");
+        }
     }
 }

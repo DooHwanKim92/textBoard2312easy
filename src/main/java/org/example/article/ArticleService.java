@@ -17,11 +17,11 @@ public class ArticleService {
     public int write(String title, String content) {
         return this.articleRepository.write(title, content);
     }
-    public int remove(Article article) {
-        return this.articleRepository.remove(article);
+    public void remove(Article article) {
+        this.articleRepository.remove(article);
     }
-    public int modify(Article article, String title, String content) {
-        return this.articleRepository.modify(article,title,content);
+    public void modify(Article article, String title, String content) {
+        this.articleRepository.modify(article,title,content);
     }
     public List<Article> findByAll() {
         return this.articleRepository.findByAll();

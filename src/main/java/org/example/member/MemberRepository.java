@@ -1,32 +1,44 @@
 package org.example.member;
 
+import org.example.article.Article;
 import org.example.global.Container;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MemberRepository {
-    List<Member> memberList = new ArrayList<>();
     int memberId = 1;
-    public MemberRepository () {
-        Member member1 = new Member(1, "user1", "1234", Container.nowDateTime());
-        memberList.add(member1);
-        Member member2 = new Member(2, "user2", "1234", Container.nowDateTime());
-        memberList.add(member2);
-        Member member3 = new Member(3, "user3", "1234", Container.nowDateTime());
-        memberList.add(member3);
+
+    public MemberRepository() {
+
     }
 
-    public String join (String userId, String password) {
-        Member member = new Member(memberId, userId, password, Container.nowDateTime());
-        memberList.add(member);
+    public void join(String userId, String password) {
+        String sql = String.format("insert into member set userId = '%s', password = '%s', regDate = now()", userId, password);
 
-        memberId++;
-
-        return member.getUserId();
+        Container.getDBConnection().insert(sql);
     }
 
-    public Member memberFindByUserId (String userId) {
+    public void exit(String userId) {
+        String sql = String.format("delete from member where userId = '%s'", userId);
+
+        Container.getDBConnection().delete(sql);
+    }
+
+    public List<Member> findByAll() {
+        List<Member> memberList = new ArrayList<>();
+        List<Map<String, Object>> rows = Container.getDBConnection().selectRows("select * from member");
+
+        for (Map<String, Object> row : rows) {
+            Member member = new Member(row);
+            memberList.add(member);
+        }
+        return memberList;
+    }
+
+    public Member memberFindByUserId(String userId) {
+        List<Member> memberList = this.findByAll();
         for (Member member : memberList) {
             if (userId.equals(member.getUserId())) {
                 return member;

@@ -53,7 +53,17 @@ public class App {
                 case "로그아웃":
                     memberController.logOut();
                     break;
+                case "회원탈퇴":
+                    memberController.exitMembership();
+                    break;
             }
         }
     }
 }
+
+
+// 자 오늘 할 일은 무어냐 하면
+// 어제 DB 연동하던거 이어서 하고
+// Member도 DB 연동해서 DB 저장시키고,
+// 아 목록 출력할 때, memberId를 작성자 이름으로 나오게 하는 것도
+// ㅇㅋ
