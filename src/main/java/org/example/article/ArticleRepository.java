@@ -2,55 +2,65 @@ package org.example.article;
 
 import org.example.global.Container;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 public class ArticleRepository {
-    int articleId = 1;
-    List<Article> articleList = new ArrayList<>();
-    String localDate = Container.nowDateTime();
-    public ArticleRepository() {
-
-    }
     public int write(String title, String content) {
+        String sql = String.format("insert into article set title = '%s', content = '%s', memberId = %d, regDate = now()",title,content,Container.getLoginedMember().getId());
 
-        String sql = String.format("insert into article set title = '%s', content = '%s', memberId = %d, localDate = now()",title,content,Container.getLoginedMember().getId());
+        int id = Container.getDBConnection().insert(sql);
 
-        Container.getDBConnection().insert(sql);
-
-        return articleId;
+        return id;
     }
-    public void remove(int removeId) {
-        Article article = articleFindById(removeId);
+    public void remove(Article article) {
+        String sql = String.format("delete from article where id = %d;",article.getId());
 
-        String sql = String.format("DELETE FROM article WHERE id = %d",removeId);
-
-        Container.getDBConnection().insert(sql);
+        Container.getDBConnection().delete(sql);
     }
-    public void modify(int modifyId, String title, String content) {
-        Article article = articleFindById(modifyId);
+    public void modify(Article article, String title, String content) {
+        String sql = String.format("update article set title = '%s', content = '%s' where id = %d;",title,content,article.getId());
 
-        String sql = String.format("DELETE FROM article WHERE id = %d",modifyId);
-
-        article.setTitle(title);
-        article.setContent(content);
+        Container.getDBConnection().update(sql);
     }
+
     public List<Article> findByAll() {
-        List<Map<String, Object>> rows = Container.getDBConnection().selectRows("select * from article");
-        for (Map<String ,Object> row :rows) {
+        List<Article> articleList = new ArrayList<>();
+
+        List<Map<String, Object>> rows =  Container.getDBConnection().selectRows("select * from article;");
+
+        for (Map<String, Object> row : rows) {
             Article article = new Article(row);
 
             articleList.add(article);
         }
-
         return articleList;
     }
+    public List<Article> findByAllIntoMemberId() {
+        List<Article> articleList = new ArrayList<>();
 
+        List<Map<String, Object>> rows =  Container.getDBConnection().selectRows("SELECT article.id,\n" +
+                "article.title,\n" +
+                "article.content,\n" +
+                "`member`.userId,\n" +
+                "article.regDate\n" +
+                "FROM article\n" +
+                "INNER JOIN `member`\n" +
+                "ON article.memberId = `member`.id;");
+
+        for (Map<String, Object> row : rows) {
+            Article article = new Article(row);
+
+            articleList.add(article);
+        }
+        return articleList;
+    }
     public Article articleFindById(int id) {
+        List<Article> articleList = this.findByAll();
+
         for (int i = 0; i < articleList.size(); i++) {
-            if (id == articleList.get(i).getId()) {
+            if (articleList.get(i).getId() == id) {
                 return articleList.get(i);
             }
         }

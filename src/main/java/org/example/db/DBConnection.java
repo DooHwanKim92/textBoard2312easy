@@ -29,7 +29,6 @@ public class DBConnection {
         try {
             connection = DriverManager.getConnection(url, user, password);
             Class.forName(driverName);
-            System.out.println("연결성공");
         } catch (SQLException e) {
             System.err.printf("[SQL 예외] : %s\n", e.getMessage());
         } catch (ClassNotFoundException e) {

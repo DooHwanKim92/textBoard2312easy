@@ -32,7 +32,7 @@ public class App {
     }
 
     public void run() {
-        System.out.println("┌================== 텍스트 게시판 ==================┐");
+        System.out.println("┌======================= 텍스트 게시판 =======================┐");
 
         while (true) {
             System.out.print("명령어 입력 ▶ ");

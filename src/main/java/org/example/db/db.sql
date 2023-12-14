@@ -5,10 +5,10 @@ USE textBoard;
 -------------------------- article table
 CREATE TABLE article (
 	id int UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT,
-	title char(100) NOT NULL unique,
+	title char(100) NOT NULL,
 	content text NOT NULL,
 	memberId int NOT NULL,
-	localDate Datetime NOT null
+	regDate Datetime NOT null
 );
 -------------------------- member table
 CREATE TABLE `member` (

@@ -1,23 +1,26 @@
 package org.example.member;
 
+import org.example.global.Container;
+
 public class MemberService {
     MemberRepository memberRepository;
-    MemberService() {
+
+    MemberService () {
         memberRepository = new MemberRepository();
     }
-    public void joinMembership(String userId, String password) {
-        memberRepository.joinMembership(userId,password);
+
+    public void join (String userId, String password) {
+        this.memberRepository.join(userId, password);
     }
-    public Member logIn(String userId, String password) {
-        return memberRepository.logIn(userId, password);
+
+    public Member memberFindByUserId(String userId) {
+        return this.memberRepository.memberFindByUserId(userId);
     }
-    public void logOut() {
-        memberRepository.logOut();
+    public void login(Member checkedMember) {
+        Container.setLoginedMember(checkedMember);
     }
-    public boolean checkId(String userId) {
-        return memberRepository.checkId(userId);
-    }
-    public boolean checkPassword(String password, String checkPassword) {
-        return memberRepository.checkPassword(password,checkPassword);
+
+    public void logout() {
+        Container.setLoginedMember(null);
     }
 }

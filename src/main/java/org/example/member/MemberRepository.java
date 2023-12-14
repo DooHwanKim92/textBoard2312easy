@@ -1,52 +1,43 @@
 package org.example.member;
 
+import org.example.article.Article;
 import org.example.global.Container;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class MemberRepository {
-    int userPrimaryId = 1;
-    String now = Container.nowDateTime();
-    List<Member> memberList = new ArrayList<>();
-    public void joinMembership(String userId, String password) {
-        Member member = new Member(userPrimaryId, userId, password, this.now);
-        memberList.add(member);
+    public MemberRepository () {
 
-        userPrimaryId++;
     }
-    public Member logIn(String userId, String password) {
-        Member checkedMember = null;
 
+    public void join (String userId, String password) {
+        String sql = String.format("insert into `member` set userId = '%s', `password` = '%s', regDate = NOW();",userId,password);
+
+        Container.getDBConnection().insert(sql);
+    }
+
+    public Member memberFindByUserId (String userId) {
+        List<Member> memberList = this.findByAll();
         for (Member member : memberList) {
             if (userId.equals(member.getUserId())) {
-                checkedMember = member;
-                return checkedMember;
+                return member;
             }
         }
-        return checkedMember;
+        return null;
     }
-    public void logOut() {}
-    public boolean checkId(String userId) {
-        boolean isDuplicated = true;
-        for (int i = 0; i < memberList.size(); i++) {
-            if (memberList.get(i).getUserId().equals(userId)) {
-                System.out.println("<알림> 중복 아이디가 존재합니다.");
-                isDuplicated = false;
-                return isDuplicated;
-            }
-        } return isDuplicated;
-    }
-    public boolean checkPassword(String password, String checkPassword) {
-        boolean isPassword = true;
-        if (!password.equals(checkPassword)) {
-            System.out.println("<알림> 비밀번호를 잘못입력했습니다.");
-            isPassword = false;
-            return isPassword;
-        }
-        return isPassword;
-    }
-    public void memberFindById() {
+    public List<Member> findByAll() {
+        List<Member> memberList = new ArrayList<>();
 
+        List<Map<String, Object>> rows =  Container.getDBConnection().selectRows("select * from `member`;");
+
+        for (Map<String, Object> row : rows) {
+            Member member = new Member(row);
+
+            memberList.add(member);
+        }
+        return memberList;
     }
+
 }
